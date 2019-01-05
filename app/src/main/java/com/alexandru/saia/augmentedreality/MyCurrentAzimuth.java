@@ -1,4 +1,4 @@
-package com.lycha.example.augmentedreality;
+package com.alexandru.saia.augmentedreality;
 
 import android.content.Context;
 import android.hardware.Sensor;

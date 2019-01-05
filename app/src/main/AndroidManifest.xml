@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lycha.example.augmentedreality"
+    package="com.alexandru.saia.augmentedreality"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -20,7 +20,7 @@
         android:theme="@style/Theme.AppCompat.Light" >
 
         <activity
-            android:name="com.lycha.example.augmentedreality.CameraViewActivity"
+            android:name="com.alexandru.saia.augmentedreality.CameraViewActivity"
             android:label="@string/title_activity_camera_view" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,8 +1,7 @@
-package com.lycha.example.augmentedreality;
+package com.alexandru.saia.augmentedreality;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
