@@ -1,6 +1,7 @@
-package com.lycha.example.augmentedreality;
+package com.alexandru.saia.augmentedreality;
 /**
  * Created by krzysztofjackowski on 24/09/15.
+ * and alexandru
  */
 public class AugmentedPOI {
 	private int mId;
@@ -8,7 +9,7 @@ public class AugmentedPOI {
 	private String mDescription;
 	private double mLatitude;
 	private double mLongitude;
-	
+
 	public AugmentedPOI(String newName, String newDescription,
 						double newLatitude, double newLongitude) {
 		this.mName = newName;
@@ -16,24 +17,9 @@ public class AugmentedPOI {
         this.mLatitude = newLatitude;
         this.mLongitude = newLongitude;
 	}
-	
-	public int getPoiId() {
-		return mId;
-	}
-	public void setPoiId(int poiId) {
-		this.mId = poiId;
-	}
+
 	public String getPoiName() {
 		return mName;
-	}
-	public void setPoiName(String poiName) {
-		this.mName = poiName;
-	}
-	public String getPoiDescription() {
-		return mDescription;
-	}
-	public void setPoiDescription(String poiDescription) {
-		this.mDescription = poiDescription;
 	}
 	public double getPoiLatitude() {
 		return mLatitude;

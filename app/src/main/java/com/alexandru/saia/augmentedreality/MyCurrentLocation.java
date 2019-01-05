@@ -1,5 +1,6 @@
-package com.lycha.example.augmentedreality;
+package com.alexandru.saia.augmentedreality;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,8 +14,10 @@ import com.google.android.gms.location.LocationServices;
 
 /**
  * Created by krzysztofjackowski on 24/09/15.
+ * and alexandru
  */
-public class MyCurrentLocation implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MyCurrentLocation implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -45,9 +48,12 @@ public class MyCurrentLocation implements GoogleApiClient.ConnectionCallbacks, G
     public void stop(){
         mGoogleApiClient.disconnect();
     }
+
+    @SuppressLint("MissingPermission")
     @Override
     public void onConnected(Bundle bundle) {
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                mLocationRequest, this);
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
@@ -62,9 +68,12 @@ public class MyCurrentLocation implements GoogleApiClient.ConnectionCallbacks, G
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e("MyApp", "Location services connection failed with code " + connectionResult.getErrorCode());
+        Log.e("MyApp", "Location services connection failed with code " +
+                connectionResult.getErrorCode());
     }
 
+
+    @SuppressLint("MissingPermission")
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(

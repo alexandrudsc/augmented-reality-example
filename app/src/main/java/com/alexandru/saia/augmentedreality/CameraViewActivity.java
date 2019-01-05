@@ -1,11 +1,16 @@
-package com.lycha.example.augmentedreality;
+package com.alexandru.saia.augmentedreality;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -18,9 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  * Created by krzysztofjackowski on 24/09/15.
+ * and alexandru
  */
 public class CameraViewActivity extends Activity implements
 		SurfaceHolder.Callback, OnLocationChangedListener, OnAzimuthChangedListener{
+
+    private static final int MY_LOCATION_REQUEST_CODE = 1;
+    private static final int CAMERA_REQUEST_CODE = 2;
 
 	private Camera mCamera;
 	private SurfaceHolder mSurfaceHolder;
@@ -47,13 +56,13 @@ public class CameraViewActivity extends Activity implements
 
 		setupListeners();
 		setupLayout();
-		setAugmentedRealityPoint();
+
 	}
 
 	private void setAugmentedRealityPoint() {
 		mPoi = new AugmentedPOI(
-				"Kościół Marciacki",
-				"Kościół Marciacki w Krakowie",
+				"Alex Dascalu",
+				"Alex Dascalu",
 				50.06169631,
 				19.93919566
 		);
@@ -65,20 +74,19 @@ public class CameraViewActivity extends Activity implements
 
 		double phiAngle;
 		double tanPhi;
-		double azimuth = 0;
 
-		tanPhi = Math.abs(dY / dX);
+        tanPhi = Math.abs(dY / dX);
 		phiAngle = Math.atan(tanPhi);
 		phiAngle = Math.toDegrees(phiAngle);
 
 		if (dX > 0 && dY > 0) { // I quater
-			return azimuth = phiAngle;
+			return phiAngle;
 		} else if (dX < 0 && dY > 0) { // II
-			return azimuth = 180 - phiAngle;
+			return 180 - phiAngle;
 		} else if (dX < 0 && dY < 0) { // III
-			return azimuth = 180 + phiAngle;
+			return 180 + phiAngle;
 		} else if (dX > 0 && dY < 0) { // IV
-			return azimuth = 360 - phiAngle;
+			return 360 - phiAngle;
 		}
 
 		return phiAngle;
@@ -104,7 +112,8 @@ public class CameraViewActivity extends Activity implements
 
 	private boolean isBetween(double minAngle, double maxAngle, double azimuth) {
 		if (minAngle > maxAngle) {
-			if (isBetween(0, maxAngle, azimuth) && isBetween(minAngle, 360, azimuth))
+			if (isBetween(0, maxAngle, azimuth) && isBetween(minAngle,
+                    360, azimuth))
 				return true;
 		} else {
 			if (azimuth > minAngle && azimuth < maxAngle)
@@ -124,7 +133,8 @@ public class CameraViewActivity extends Activity implements
 		mMyLatitude = location.getLatitude();
 		mMyLongitude = location.getLongitude();
 		mAzimuthTeoretical = calculateTeoreticalAzimuth();
-		Toast.makeText(this,"latitude: "+location.getLatitude()+" longitude: "+location.getLongitude(), Toast.LENGTH_SHORT).show();
+		Toast.makeText(this,"latitude: "+location.getLatitude()+" longitude: " +
+                location.getLongitude(), Toast.LENGTH_SHORT).show();
 		updateDescription();
 	}
 
@@ -133,7 +143,7 @@ public class CameraViewActivity extends Activity implements
 		mAzimuthReal = azimuthChangedTo;
 		mAzimuthTeoretical = calculateTeoreticalAzimuth();
 
-		pointerIcon = (ImageView) findViewById(R.id.icon);
+		pointerIcon = findViewById(R.id.icon);
 
 		double minAngle = calculateAzimuthAccuracy(mAzimuthTeoretical).get(0);
 		double maxAngle = calculateAzimuthAccuracy(mAzimuthTeoretical).get(1);
@@ -157,17 +167,60 @@ public class CameraViewActivity extends Activity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-		myCurrentAzimuth.start();
-		myCurrentLocation.start();
+		if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted();
+		} else {
+			// Show rationale and request permission.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_LOCATION_REQUEST_CODE);
+
+        }
 	}
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        switch (requestCode)
+        {
+            case MY_LOCATION_REQUEST_CODE:
+                if (permissions.length == 1 &&
+                        permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationPermissionGranted();
+                } else {
+                    // Permission was denied. Display an error message.
+                    Toast.makeText(this,
+                            "App needs location permission", Toast.LENGTH_SHORT).show();
+                    this.finish();
+                }
+                break;
+            case CAMERA_REQUEST_CODE:
+                if (permissions.length == 1 &&
+                        permissions[0].equals(Manifest.permission.CAMERA) &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    cameraPermissionGranted();
+                } else {
+                    // Permission was denied. Display an error message.
+                    Toast.makeText(this,
+                            "App needs camera permission", Toast.LENGTH_SHORT).show();
+                    this.finish();
+                }
+                break;
+        }
+    }
+
+    private void locationPermissionGranted() {
+        myCurrentLocation.buildGoogleApiClient(this);
+
+	    myCurrentAzimuth.start();
+        myCurrentLocation.start();
+    }
 
 	private void setupListeners() {
 		myCurrentLocation = new MyCurrentLocation(this);
-		myCurrentLocation.buildGoogleApiClient(this);
-		myCurrentLocation.start();
-
 		myCurrentAzimuth = new MyCurrentAzimuth(this, this);
-		myCurrentAzimuth.start();
 	}
 
 	private void setupLayout() {
@@ -201,15 +254,53 @@ public class CameraViewActivity extends Activity implements
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		mCamera = Camera.open();
-		mCamera.setDisplayOrientation(90);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            cameraPermissionGranted();
+        }
+        else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    CAMERA_REQUEST_CODE);
+        }
+
 	}
 
-	@Override
+    private void cameraPermissionGranted() {
+        mCamera = Camera.open();
+
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
+        int rotation = this.getWindowManager().getDefaultDisplay()
+                .getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90: degrees = 90; break;
+            case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270: degrees = 270; break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+
+        mCamera.setDisplayOrientation(result);
+        setAugmentedRealityPoint();
+    }
+
+    @Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		mCamera.stopPreview();
-		mCamera.release();
-		mCamera = null;
+	    if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
 		isCameraviewOn = false;
 	}
 }
