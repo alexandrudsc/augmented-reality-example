@@ -1,2 +1,9 @@
+#v0.5.8
+- [Feature] support for runtime permissions
+- [Change] target API level
+- [BugFix] renamed main package
+- [BugFix] don't use camera if permission not granted
+
+
 # started changelog
 - initial fork
