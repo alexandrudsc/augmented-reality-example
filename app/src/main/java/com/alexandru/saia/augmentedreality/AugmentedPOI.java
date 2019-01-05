@@ -4,7 +4,6 @@ package com.alexandru.saia.augmentedreality;
  * and alexandru
  */
 public class AugmentedPOI {
-	private int mId;
 	private String mName;
 	private String mDescription;
 	private double mLatitude;

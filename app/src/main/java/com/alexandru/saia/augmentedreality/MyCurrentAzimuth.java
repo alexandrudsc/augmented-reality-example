@@ -35,10 +35,6 @@ public class MyCurrentAzimuth implements SensorEventListener {
         sensorManager.unregisterListener(this);
     }
 
-    public void setOnShakeListener(OnAzimuthChangedListener listener) {
-        mAzimuthListener = listener;
-    }
-
     @Override
     public void onSensorChanged(SensorEvent event) {
         azimuthFrom = azimuthTo;

@@ -95,7 +95,7 @@ public class CameraViewActivity extends Activity implements
 	private List<Double> calculateAzimuthAccuracy(double azimuth) {
 		double minAngle = azimuth - AZIMUTH_ACCURACY;
 		double maxAngle = azimuth + AZIMUTH_ACCURACY;
-		List<Double> minMax = new ArrayList<Double>();
+		List<Double> minMax = new ArrayList<>();
 
 		if (minAngle < 0)
 			minAngle += 360;
@@ -175,7 +175,6 @@ public class CameraViewActivity extends Activity implements
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_LOCATION_REQUEST_CODE);
-
         }
 	}
 
