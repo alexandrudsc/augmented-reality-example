@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 
 /**
  * Created by krzysztofjackowski on 24/09/15.
+ * and alexandru
  */
 public class MyCurrentAzimuth implements SensorEventListener {
 
@@ -45,7 +46,8 @@ public class MyCurrentAzimuth implements SensorEventListener {
         float[] orientation = new float[3];
         float[] rMat = new float[9];
         SensorManager.getRotationMatrixFromVector(rMat, event.values);
-        azimuthTo = (int) ( Math.toDegrees( SensorManager.getOrientation( rMat, orientation )[0] ) + 360 ) % 360;
+        azimuthTo = (int) ( Math.toDegrees(
+                SensorManager.getOrientation( rMat, orientation )[0] ) + 360 ) % 360;
 
         mAzimuthListener.onAzimuthChanged(azimuthFrom, azimuthTo);
     }
