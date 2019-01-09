@@ -120,9 +120,16 @@ public class CameraViewActivity extends Activity implements
     }
 
 	private void updateDescription() {
-		descriptionTextView.setText(mPoi.getPoiName() + " azimuthTeoretical "
-				+ mAzimuthTeoretical + " azimuthReal " + mAzimuthReal + " latitude "
-				+ mMyLatitude + " longitude " + mMyLongitude);
+        String sb = mPoi.getPoiName() +
+                " azimuthTheoretical " +
+                mAzimuthTeoretical +
+                " azimuthReal " +
+                mAzimuthReal +
+                " latitude " +
+                mMyLatitude +
+                " longitude " +
+                mMyLongitude;
+        descriptionTextView.setText(sb);
 	}
 
 	@Override
