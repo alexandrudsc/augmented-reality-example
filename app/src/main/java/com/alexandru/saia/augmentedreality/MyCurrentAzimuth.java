@@ -25,7 +25,7 @@ public class MyCurrentAzimuth implements SensorEventListener {
     }
 
     public void start(){
-        sensorManager = (SensorManager) mContext.getSystemService(mContext.SENSOR_SERVICE);
+        sensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         sensorManager.registerListener(this, sensor,
                 SensorManager.SENSOR_DELAY_UI);
@@ -41,10 +41,15 @@ public class MyCurrentAzimuth implements SensorEventListener {
 
         float[] orientation = new float[3];
         float[] rMat = new float[9];
+        float[] outMat = new float[9];
         SensorManager.getRotationMatrixFromVector(rMat, event.values);
-        azimuthTo = (int) ( Math.toDegrees(
-                SensorManager.getOrientation( rMat, orientation )[0] ) + 360 ) % 360;
 
+        // remap coords
+        SensorManager.remapCoordinateSystem(rMat, SensorManager.AXIS_X, SensorManager.AXIS_Z,
+                outMat);
+
+        azimuthTo = (int) ( Math.toDegrees(
+                SensorManager.getOrientation( outMat, orientation )[0] ) + 360 ) % 360;
         mAzimuthListener.onAzimuthChanged(azimuthFrom, azimuthTo);
     }
 

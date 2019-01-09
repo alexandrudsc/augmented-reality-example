@@ -112,15 +112,12 @@ public class CameraViewActivity extends Activity implements
 
 	private boolean isBetween(double minAngle, double maxAngle, double azimuth) {
 		if (minAngle > maxAngle) {
-			if (isBetween(0, maxAngle, azimuth) && isBetween(minAngle,
-                    360, azimuth))
-				return true;
+            return isBetween(0, maxAngle, azimuth) && isBetween(minAngle,
+                    360, azimuth);
 		} else {
-			if (azimuth > minAngle && azimuth < maxAngle)
-				return true;
+            return azimuth > minAngle && azimuth < maxAngle;
 		}
-		return false;
-	}
+    }
 
 	private void updateDescription() {
 		descriptionTextView.setText(mPoi.getPoiName() + " azimuthTeoretical "
@@ -148,13 +145,46 @@ public class CameraViewActivity extends Activity implements
 		double minAngle = calculateAzimuthAccuracy(mAzimuthTeoretical).get(0);
 		double maxAngle = calculateAzimuthAccuracy(mAzimuthTeoretical).get(1);
 
-		if (isBetween(minAngle, maxAngle, mAzimuthReal)) {
-			pointerIcon.setVisibility(View.VISIBLE);
-		} else {
-			pointerIcon.setVisibility(View.INVISIBLE);
+//		if (isBetween(minAngle, maxAngle, mAzimuthReal)) {
+//			pointerIcon.setVisibility(View.VISIBLE);
+//		} else {
+//			pointerIcon.setVisibility(View.INVISIBLE);
+//		}
+
+        ImageView img_north = findViewById(R.id.icon_north);
+        img_north.setVisibility(View.INVISIBLE);
+        ImageView img_south = findViewById(R.id.icon_south);
+        img_south.setVisibility(View.INVISIBLE);
+        ImageView img_west = findViewById(R.id.icon_west);
+        img_west.setVisibility(View.INVISIBLE);
+        ImageView img_east = findViewById(R.id.icon_east);
+        img_east.setVisibility(View.INVISIBLE);
+
+		if (is_around(360 - 10, mAzimuthReal) ||
+                is_around(0, mAzimuthReal))
+		{
+			//pointerIcon.setImageResource();
+			img_north.setVisibility(View.VISIBLE);
 		}
+		else if (is_around(270 - 10, mAzimuthReal))
+        {
+            img_west.setVisibility(View.VISIBLE);
+        }
+        else if (is_around(180 - 10, mAzimuthReal))
+        {
+            img_south.setVisibility(View.VISIBLE);
+        }
+        else if (is_around(90 - 10, mAzimuthReal))
+        {
+            img_east.setVisibility(View.VISIBLE);
+        }
 
 		updateDescription();
+	}
+
+	private boolean is_around(double angle_point, double mAzimuthTeoretical) {
+		int DELTA = 5;
+		return Math.abs(angle_point - mAzimuthTeoretical) < DELTA;
 	}
 
 	@Override

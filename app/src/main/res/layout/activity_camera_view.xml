@@ -10,12 +10,39 @@
         android:layout_height="wrap_content" />
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/icon_north"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_launcher" 
+        android:src="@drawable/north"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/icon_south"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/south"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/icon_west"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/west"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/icon_east"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/east"
         android:visibility="invisible" />
 
     <TextView
