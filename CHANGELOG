@@ -1,4 +1,9 @@
-#v0.5.8
+#v0.8.0
+- [Feature] support for west, east, north, south
+- [Refactored] removed some unused code
+
+
+#v0.5.0
 - [Feature] support for runtime permissions
 - [Change] target API level
 - [BugFix] renamed main package
